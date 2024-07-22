@@ -76,7 +76,38 @@ def inverse_and_determinant(matrix):
 
     inverse_matrix = rref_matrix[:, cols:]
 
-    determinant = np.linalg.det(matrix)
+    # determinant = np.linalg.det(matrix)
+    n = len(matrix)
+
+    if n == 1:
+        determinant =  matrix[0][0]
+
+    if n == 2:
+        determinant = matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0]
+
+    A = [row[:] for row in matrix]
+
+    for i in range(n):
+        max_el = abs(A[i][i])
+        max_row = i
+        for k in range(i+1, n):
+            if abs(A[k][i]) > max_el:
+                max_el = abs(A[k][i])
+                max_row = k
+
+        A[i], A[max_row] = A[max_row], A[i]
+
+        for k in range(i+1, n):
+            c = -A[k][i] / A[i][i]
+            for j in range(i, n):
+                if i == j:
+                    A[k][j] = 0
+                else:
+                    A[k][j] += c * A[i][j]
+
+    determinant = 1
+    for i in range(n):
+        determinant *= A[i][i]
 
     return inverse_matrix, determinant
 
